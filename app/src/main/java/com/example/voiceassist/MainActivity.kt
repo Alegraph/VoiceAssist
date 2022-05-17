@@ -12,6 +12,7 @@ import android.widget.SimpleAdapter
 import android.widget.TextView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.wolfram.alpha.WAEngine
 
@@ -103,6 +104,15 @@ class MainActivity : AppCompatActivity() {
         waEngine = WAEngine().apply {
             appID = "58KP9L-L3E58W86WE"
             addFormat("plaintext")
+        }
+    }
+
+    fun showSnackbar(message: String ){
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE).apply {
+            setAction(android.R.string.ok) {
+                dismiss()
+            }
+            show()
         }
     }
 }
