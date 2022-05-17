@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Adapter
 import android.widget.ListView
 import android.widget.ProgressBar
@@ -15,6 +16,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.wolfram.alpha.WAEngine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Suppress("UNREACHABLE_CODE")
 class MainActivity : AppCompatActivity() {
@@ -113,6 +118,26 @@ class MainActivity : AppCompatActivity() {
                 dismiss()
             }
             show()
+        }
+    }
+
+    fun askWolfram(request: String) {
+        progressBar.visibility = View.VISIBLE
+        CoroutineScope(Dispatchers.IO).launch {
+            val query = waEngine.createQuery().apply { input = request }
+            runCatching {
+                waEngine.performQuery(query)
+            }.onSuccess { result ->
+                withContext(Dispatchers.Main){
+                    progressBar.visibility = View.GONE
+                    // обработь запрос - ответ
+                }
+            }.onFailure { t ->
+                withContext(Dispatchers.Main) {
+                    progressBar.visibility = View.GONE
+                    // обработать ошибку
+                }
+            }
         }
     }
 }
