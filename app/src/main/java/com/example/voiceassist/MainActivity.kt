@@ -13,7 +13,7 @@ import android.widget.TextView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-//import com.wolfram.alpha.WAEngine
+import com.wolfram.alpha.WAEngine
 
 @Suppress("UNREACHABLE_CODE")
 class MainActivity : AppCompatActivity() {
@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var podsAdapter: SimpleAdapter
 
     lateinit var progressBar: ProgressBar
+
+    lateinit var waEngine: WAEngine
 
     val pods = mutableListOf<HashMap<String, String>>(
         HashMap<String, String>().apply {
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initViews()
+        initWalframEngin()
     }
 
     fun initViews() {
@@ -94,5 +97,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun initWalframEngin(){
+        waEngine = WAEngine().apply {
+            appID = "58KP9L-L3E58W86WE"
+            addFormat("plaintext")
+        }
     }
 }
