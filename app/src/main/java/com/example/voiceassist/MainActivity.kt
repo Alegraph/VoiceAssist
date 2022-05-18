@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Adapter
 import android.widget.ListView
 import android.widget.ProgressBar
@@ -34,25 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var waEngine: WAEngine
 
-    val pods = mutableListOf<HashMap<String, String>>(
-        HashMap<String, String>().apply {
-            put("Title", "Title 1")
-            put("Content", "Content 1")
-        },
-        HashMap<String, String>().apply {
-            put("Title", "Title 2")
-            put("Content", "Content 2")
-        },
-        HashMap<String, String>().apply {
-            put("Title", "Title 3")
-            put("Content", "Content 3")
-        },
-        HashMap<String, String>().apply {
-            put("Title", "Title 4")
-            put("Content", "Content 4")
-        }
-
-    )
+    val pods = mutableListOf<HashMap<String, String>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +50,17 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         requestInput = findViewById(R.id.text_input_edit)
+        requestInput.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                pods.clear()
+                podsAdapter.notifyDataSetChanged()
+
+                val question = requestInput.text.toString()
+                askWolfram(question)
+            }
+
+            return@setOnEditorActionListener  false
+        }
 
         val podsList: ListView = findViewById(R.id.pods_list)
         podsAdapter = SimpleAdapter(
