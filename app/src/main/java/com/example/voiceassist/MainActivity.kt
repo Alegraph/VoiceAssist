@@ -23,6 +23,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.HashMap
 
 @Suppress("UNREACHABLE_CODE")
 class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W86WE
@@ -40,12 +42,15 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
 
     lateinit var textToSpeech: TextToSpeech
 
+    var isTtsReady: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initViews()
         initWalframEngin()
+        initTts()
     }
 
     fun initViews() {
@@ -74,6 +79,7 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
             intArrayOf(R.id.title, R.id.content)
         )
         podsList.adapter = podsAdapter
+
 
         val voiceInputButton: FloatingActionButton = findViewById(R.id.voice_input_button)
         voiceInputButton.setOnClickListener {
@@ -165,5 +171,17 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
                 }
             }
         }
+    }
+
+    fun initTts() {
+        textToSpeech = TextToSpeech(this) {code ->
+            if (code != TextToSpeech.SUCCESS) {
+                Log.e(TAG, "TTS error code: $code")
+                showSnackbar(getString(R.string.error_tts_is_not_ready))
+            } else {
+                isTtsReady = true
+            }
+        }
+        textToSpeech.language = Locale.US
     }
 }
