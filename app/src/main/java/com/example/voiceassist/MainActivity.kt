@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.wolfram.alpha.WAEngine
+import com.wolfram.alpha.WAPlainText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,12 +131,38 @@ class MainActivity : AppCompatActivity() {
             }.onSuccess { result ->
                 withContext(Dispatchers.Main){
                     progressBar.visibility = View.GONE
-                    // обработь запрос - ответ
+                    if (result.isError) {
+                        showSnackbar(result.errorMessage)
+                        return@withContext
+                    }
+
+                    if (!result.isSuccess) {
+                        requestInput.error = getString(R.string.error_do_not_understand)
+                        return@withContext
+                    }
+
+                    for (pod in result.pods) {
+                        if (!pod.isError) continue
+                        val content = StringBuilder()
+                        for (subpod in pod.subpods) {
+                            for (element in subpod.contents) {
+                                if (element is WAPlainText) {
+                                    content.append(element.text)
+                                }
+                            }
+                        }
+                        pods.add(0, HashMap<String, String>().apply {
+                            put("Title", pod.title)
+                            put("Content", content.toString())
+                        })
+                    }
+
+                    podsAdapter.notifyDataSetChanged()
                 }
             }.onFailure { t ->
                 withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
-                    // обработать ошибку
+                    showSnackbar(t.message ?: getString(R.string.error_something_went_wrong))
                 }
             }
         }
