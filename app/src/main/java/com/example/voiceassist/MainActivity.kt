@@ -2,6 +2,7 @@ package com.example.voiceassist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
     lateinit var waEngine: WAEngine
 
     val pods = mutableListOf<HashMap<String, String>>()
+
+    lateinit var textToSpeech: TextToSpeech
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
