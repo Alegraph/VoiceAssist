@@ -93,7 +93,9 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_clear -> {
-                Log.d(TAG, "actions_clear")
+                requestInput.text?.clear()
+                pods.clear()
+                podsAdapter.notifyDataSetChanged()
                 return true
             }
         }
