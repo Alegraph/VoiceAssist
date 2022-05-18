@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
                 askWolfram(question)
             }
 
-            return@setOnEditorActionListener  false
+            return@setOnEditorActionListener false
         }
 
         val podsList: ListView = findViewById(R.id.pods_list)
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
             intArrayOf(R.id.title, R.id.content)
         )
         podsList.adapter = podsAdapter
-        podsList.setOnItemClickListener {parent, view, position, id ->
+        podsList.setOnItemClickListener { parent, view, position, id ->
             if (isTtsReady) {
                 val title = pods[position]["Title"]
                 val content = pods[position]["Content"]
@@ -104,8 +104,10 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_stop -> {
-                Log.d(TAG, "actions_stop")
-                return true
+                if (isTtsReady) {
+                    textToSpeech.stop()
+                }
+                    return true
             }
             R.id.action_clear -> {
                 requestInput.text?.clear()
@@ -117,14 +119,14 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
         return super.onOptionsItemSelected(item)
     }
 
-    fun initWalframEngin(){
+    fun initWalframEngin() {
         waEngine = WAEngine().apply {
             appID = "58KP9L-L3E58W86WE" //58KP9L-EGK2LERWL3
             addFormat("plaintext")
         }
     }
 
-    fun showSnackbar(message: String ){
+    fun showSnackbar(message: String) {
         Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_INDEFINITE).apply {
             setAction(android.R.string.ok) {
                 dismiss()
@@ -140,7 +142,7 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
             runCatching {
                 waEngine.performQuery(query)
             }.onSuccess { result ->
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
                     if (result.isError) {
                         showSnackbar(result.errorMessage)
@@ -180,7 +182,7 @@ class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W8
     }
 
     fun initTts() {
-        textToSpeech = TextToSpeech(this) {code ->
+        textToSpeech = TextToSpeech(this) { code ->
             if (code != TextToSpeech.SUCCESS) {
                 Log.e(TAG, "TTS error code: $code")
                 showSnackbar(getString(R.string.error_tts_is_not_ready))
