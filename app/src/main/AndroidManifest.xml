@@ -11,7 +11,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.VoiceAssist"
-            android:usesCleartextTraffic="true">
+            android:usesCleartextTraffic="true" >
         <uses-library android:name="org.apache.http.legacy"
                       android:required="false"/>
         <activity

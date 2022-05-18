@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Suppress("UNREACHABLE_CODE")
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {   //58KP9L-EGK2LERWL3  58KP9L-L3E58W86WE
     val TAG: String = "MainActivity"
 
     lateinit var requestInput: TextInputEditText
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     fun initWalframEngin(){
         waEngine = WAEngine().apply {
-            appID = "58KP9L-L3E58W86WE"
+            appID = "58KP9L-L3E58W86WE" //58KP9L-EGK2LERWL3
             addFormat("plaintext")
         }
     }
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     for (pod in result.pods) {
-                        if (!pod.isError) continue
+                        if (pod.isError) continue
                         val content = StringBuilder()
                         for (subpod in pod.subpods) {
                             for (element in subpod.contents) {
